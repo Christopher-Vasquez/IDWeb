@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Estudiante - Sistema de Gestión Académica</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main>
+    <div class="card">
+      <h1>Registro de Nuevo Estudiante</h1>
+      <p class="subtitle">Completa todos los campos para crear tu cuenta en el sistema académico.</p>
+
+      <form action="/procesar" method="POST" class="form-container" novalidate>
+
+        <fieldset>
+          <legend>Información Personal</legend>
+
+          <div class="form-group">
+            <label for="nombres" class="form-label">Nombres:</label>
+            <input type="text" id="nombres" name="nombres" class="form-input"
+              required minlength="2" maxlength="60" placeholder="Ej. Chris">
+          </div>
+
+          <div class="form-group">
+            <label for="apellidos" class="form-label">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" class="form-input"
+              required minlength="2" maxlength="60" placeholder="Ej. Ramírez">
+          </div>
+
+          <div class="form-group">
+            <label for="fecha-nacimiento" class="form-label">Fecha de nacimiento:</label>
+            <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" class="form-input"
+              required min="1970-01-01" max="2012-12-31">
+          </div>
+
+          <div class="form-group">
+            <span class="form-label">Turno preferido:</span>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="turno" value="manana" required> Mañana
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="turno" value="tarde" required> Tarde
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="turno" value="noche" required> Noche
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Información de la Cuenta</legend>
+
+          <div class="form-group">
+            <label for="codigo" class="form-label">Código de estudiante:</label>
+            <input type="text" id="codigo" name="codigo" class="form-input"
+              required pattern="[0-9]{8}" maxlength="8"
+              placeholder="Ej. 20261234"
+              title="Debe contener exactamente 8 dígitos numéricos">
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Correo institucional:</label>
+            <input type="email" id="email" name="email" class="form-input"
+              required placeholder="usuario@universidad.edu.pe">
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Contraseña:</label>
+            <input type="password" id="password" name="password" class="form-input"
+              required minlength="8"
+              pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}"
+              title="Mínimo 8 caracteres, incluyendo al menos una mayúscula y un número"
+              placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número">
+          </div>
+
+          <div class="form-group">
+            <label for="carrera" class="form-label">Carrera Profesional:</label>
+            <select id="carrera" name="carrera" class="form-input" required>
+              <option value="" disabled selected>Selecciona una carrera</option>
+              <option value="sistemas">Ingeniería de Sistemas</option>
+              <option value="industrial">Ingeniería Industrial</option>
+              <option value="civil">Ingeniería Civil</option>
+              <option value="administracion">Administración</option>
+              <option value="derecho">Derecho</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="comentarios" class="form-label">Comentarios (opcional):</label>
+            <textarea id="comentarios" name="comentarios" class="form-input" rows="4"
+              maxlength="300" placeholder="¿Algo que debamos saber sobre tu registro?"></textarea>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="terminos" name="terminos" required>
+              Acepto los <a href="#">términos y condiciones</a> del sistema académico.
+            </label>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn-submit">Crear cuenta</button>
+      </form>
+    </div>
+  </main>
+
+</body>
+</html>
