@@ -1,0 +1,73 @@
+/* styles.css - Landing Page Portal Académico
+   Complementa a Bootstrap 5 con Flexbox y Grid nativos */
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+}
+/* ===== Hero Section: Flexbox nativo (mobile-first) ===== */
+.hero {
+  display: flex;
+  flex-direction: column;   /* Mobile: texto arriba, imagen abajo */
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 1.5rem;
+  background-color: #f4f6f9;
+  text-align: center;
+}
+.hero-text {
+  flex: 1;
+  max-width: 500px;
+}
+.hero-text h1 {
+  color: #1b3a5c;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+.hero-image {
+  flex: 1;
+  max-width: 450px;
+  width: 100%;
+}
+.hero-image img {
+  width: 100%;
+  border-radius: 10px;
+}
+/* Desktop: texto a la izquierda, imagen a la derecha */
+@media (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+    text-align: left;
+    padding: 4rem 3rem;
+  }
+}
+/* ===== Catálogo de Cursos: CSS Grid mobile-first ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+.curso-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.curso-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+.curso-card h3 {
+  color: #1b3a5c;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.curso-card p {
+  color: #555;
+  font-size: 0.9rem;
+  margin: 0;
+}

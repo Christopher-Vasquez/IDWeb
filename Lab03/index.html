@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Académico - Sistema de Gestión Académica</title>
+
+  <!-- Bootstrap 5 CSS (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Estilos propios (Flexbox + Grid) -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== 1. Navegación y Cabecera (Bootstrap Navbar) ===== -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Portal Académico</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Alternar navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#cursos">Cursos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#noticias">Noticias</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-light">Iniciar Sesión</button>
+          <button class="btn btn-light">Registrarse</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== 2. Hero Section (Flexbox nativo) ===== -->
+  <section id="inicio" class="hero">
+    <div class="hero-text">
+      <h1>Impulsa tu futuro profesional</h1>
+      <p>Accede a nuestros cursos, revisa tu progreso académico y mantente al
+        día con las noticias del campus, todo desde un solo portal.</p>
+      <a href="#cursos" class="btn btn-primary btn-lg">Ver cursos</a>
+    </div>
+    <div class="hero-image">
+      <img src="img/hero.png" alt="Estudiantes trabajando en un proyecto de tecnología">
+    </div>
+  </section>
+
+  <!-- ===== 3. Catálogo de Cursos (CSS Grid nativo) ===== -->
+  <section id="cursos" class="container py-5">
+    <h2 class="text-center mb-4">Cursos Ofertados</h2>
+    <div class="card-grid">
+
+      <div class="curso-card">
+        <h3>Introducción al Desarrollo Web</h3>
+        <p>Fundamentos de HTML5, CSS3 y control de versiones con Git.</p>
+      </div>
+
+      <div class="curso-card">
+        <h3>Bases de Datos I</h3>
+        <p>Modelado relacional, SQL y diseño de esquemas normalizados.</p>
+      </div>
+
+      <div class="curso-card">
+        <h3>Estructuras de Datos</h3>
+        <p>Listas, pilas, colas, árboles y su aplicación en algoritmos.</p>
+      </div>
+
+      <div class="curso-card">
+        <h3>Redes de Computadoras</h3>
+        <p>Modelo OSI, protocolos TCP/IP y configuración de redes básicas.</p>
+      </div>
+
+      <div class="curso-card">
+        <h3>Programación Orientada a Objetos</h3>
+        <p>Clases, herencia, polimorfismo y buenas prácticas de diseño.</p>
+      </div>
+
+      <div class="curso-card">
+        <h3>Ingeniería de Software</h3>
+        <p>Metodologías ágiles, ciclo de vida y gestión de proyectos.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== 4. Módulo de Noticias y Eventos (Componentes Bootstrap) ===== -->
+  <section id="noticias" class="container py-5">
+    <h2 class="text-center mb-4">Noticias y Eventos</h2>
+    <div class="row g-4">
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Semana de Innovación 2026</h5>
+            <p class="card-text">Conferencias y talleres sobre inteligencia artificial
+              aplicada, del 12 al 16 de octubre.</p>
+            <button type="button" class="btn btn-primary"
+              data-bs-toggle="modal" data-bs-target="#modalInnovacion">
+              Más información
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Nuevas becas de movilidad</h5>
+            <p class="card-text">Convocatoria abierta para intercambios académicos
+              en universidades socias.</p>
+            <button type="button" class="btn btn-primary"
+              data-bs-toggle="modal" data-bs-target="#modalBecas">
+              Más información
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Feria laboral universitaria</h5>
+            <p class="card-text">Empresas del sector tecnológico presentes en el
+              campus el próximo mes.</p>
+            <button type="button" class="btn btn-primary"
+              data-bs-toggle="modal" data-bs-target="#modalFeria">
+              Más información
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Modales de Bootstrap ===== -->
+  <div class="modal fade" id="modalInnovacion" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Semana de Innovación 2026</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Del 12 al 16 de octubre, en el auditorio principal. Incluye charlas
+            magistrales, talleres prácticos y un hackathon estudiantil.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalBecas" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Nuevas becas de movilidad</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Postulaciones abiertas hasta fin de mes. Revisa los requisitos en la
+            oficina de Relaciones Internacionales.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalFeria" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Feria laboral universitaria</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Empresas de tecnología, banca y consultoría estarán presentes con
+            procesos de reclutamiento en vivo.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-light text-center py-4">
+    <p class="mb-0">&copy; 2026 Portal Académico. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle (necesario para navbar colapsable y modales) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
