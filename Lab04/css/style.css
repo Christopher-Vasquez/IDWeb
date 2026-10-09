@@ -1,0 +1,21 @@
+/* css/style.css - Gestor de Tareas Universitarias */
+* {
+  box-sizing: border-box;
+}
+body {
+  background-color: #f4f6f9;
+}
+/* Tarea completada: texto tachado y atenuado (se alterna desde JS) */
+.tarea-completada strong {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+.tarea-completada small {
+  text-decoration: line-through;
+}
+.list-group-item {
+  transition: background-color 0.2s;
+}
+.list-group-item:hover {
+  background-color: #eef2f6;
+}
