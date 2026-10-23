@@ -1,0 +1,16 @@
+{
+  "name": "lab06",
+  "version": "1.0.0",
+  "description": "Lab 06 - API RESTful de Cursos con Express (rutas, controladores y middlewares)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
