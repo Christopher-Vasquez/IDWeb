@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "nombre": "Omar Torres",
+    "codigo": "20260001",
+    "carrera": "Ingeniería de Sistemas"
+  },
+  {
+    "id": 2,
+    "nombre": "Christopher Vásquez",
+    "codigo": "20260002",
+    "carrera": "Ingeniería de Sistemas"
+  }
+]
