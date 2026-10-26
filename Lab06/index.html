@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio 06 - Panel de Cursos</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 0 20px; background-color: #f4f7f6; }
+        h1, h2 { color: #333; }
+        .form-group { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input { display: block; width: 95%; margin: 10px 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .curso-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-delete { background-color: #dc3545; }
+        .btn-delete:hover { background-color: #bd2130; }
+        #mensaje { color: red; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Gestión del Laboratorio de Cursos</h1>
+    
+    <div class="form-group">
+        <h2>Agregar Nuevo Curso</h2>
+        <div id="mensaje"></div>
+        <input type="text" id="nombre" placeholder="Nombre del Curso">
+        <input type="text" id="codigo" placeholder="Código (Ej: IDW-101)">
+        <input type="number" id="creditos" placeholder="Créditos (Entero > 0)">
+        <button onclick="agregarCurso()">Guardar Curso</button>
+    </div>
+
+    <h2>Lista de Cursos Actuales</h2>
+    <div id="lista-cursos"></div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
