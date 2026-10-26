@@ -1,40 +1,63 @@
-const API_URL = '/api/cursos';
+// Si la página no se abre desde el servidor Express (Live Server, file://), apunta a localhost:3000
+const BASE = window.location.port === '3000' ? '' : 'http://localhost:3000';
+const API_URL = `${BASE}/api/cursos`;
+
+const divMensaje = document.getElementById('mensaje');
+const contenedor = document.getElementById('lista-cursos');
+
+function mostrarMensaje(texto) {
+    divMensaje.textContent = texto;
+}
 
 // 1. Obtener y renderizar todos los cursos (GET)
 async function cargarCursos() {
     try {
         const respuesta = await fetch(API_URL);
         const data = await respuesta.json();
-        
-        const contenedor = document.getElementById('lista-cursos');
-        contenedor.innerHTML = ''; // Limpiar lista
 
-        if (data.status === 'success') {
-            data.data.forEach(curso => {
-                const card = document.createElement('div');
-                card.className = 'curso-card';
-                card.innerHTML = `
-                    <div>
-                        <strong>${curso.nombre}</strong> (${curso.codigo}) 
-                        <br> <small>Créditos: ${curso.creditos}</small>
-                    </div>
-                    <button class="btn-delete" onclick="eliminarCurso(${curso.id})">Eliminar</button>
-                `;
-                contenedor.appendChild(card);
-            });
+        contenedor.innerHTML = '';
+
+        if (data.status !== 'success') {
+            mostrarMensaje(data.message || 'No se pudo cargar la lista de cursos');
+            return;
         }
+
+        if (data.data.length === 0) {
+            contenedor.textContent = 'No hay cursos registrados.';
+            return;
+        }
+
+        data.data.forEach((curso) => {
+            const card = document.createElement('div');
+            card.className = 'curso-card';
+
+            const info = document.createElement('div');
+            const titulo = document.createElement('strong');
+            titulo.textContent = curso.nombre;
+            const detalle = document.createElement('small');
+            detalle.textContent = `Créditos: ${curso.creditos}`;
+            info.append(titulo, ` (${curso.codigo})`, document.createElement('br'), detalle);
+
+            const btn = document.createElement('button');
+            btn.className = 'btn-delete';
+            btn.textContent = 'Eliminar';
+            btn.addEventListener('click', () => eliminarCurso(curso.id));
+
+            card.append(info, btn);
+            contenedor.appendChild(card);
+        });
     } catch (error) {
         console.error('Error al cargar cursos:', error);
+        mostrarMensaje('No se pudo conectar con el servidor. ¿Está corriendo en http://localhost:3000?');
     }
 }
 
-// 2. Agregar un curso validando los campos (POST)
+// 2. Agregar un curso (POST)
 async function agregarCurso() {
-    const nombre = document.getElementById('nombre').value;
-    const codigo = document.getElementById('codigo').value;
+    const nombre = document.getElementById('nombre').value.trim();
+    const codigo = document.getElementById('codigo').value.trim();
     const creditos = document.getElementById('creditos').value;
-    const divMensaje = document.getElementById('mensaje');
-    divMensaje.innerText = ''; // Limpiar errores previos
+    mostrarMensaje('');
 
     try {
         const respuesta = await fetch(API_URL, {
@@ -42,40 +65,44 @@ async function agregarCurso() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, codigo, creditos })
         });
-        
         const resultado = await respuesta.json();
 
-        if (resultado.status === 'fail') {
-            divMensaje.innerText = resultado.message; // Mostrar error del controlador Express
-        } else {
-            // Limpiar formulario si todo sale bien
-            document.getElementById('nombre').value = '';
-            document.getElementById('codigo').value = '';
-            document.getElementById('creditos').value = '';
-            cargarCursos(); // Refrescar lista visualmente
+        if (resultado.status !== 'success') {
+            mostrarMensaje(resultado.message || 'No se pudo guardar el curso');
+            return;
         }
+
+        document.getElementById('nombre').value = '';
+        document.getElementById('codigo').value = '';
+        document.getElementById('creditos').value = '';
+        cargarCursos();
     } catch (error) {
         console.error('Error al guardar curso:', error);
+        mostrarMensaje('No se pudo conectar con el servidor.');
     }
 }
 
-// 3. Eliminar un curso de la lista (DELETE)
+// 3. Eliminar un curso (DELETE)
 async function eliminarCurso(id) {
     if (!confirm('¿Estás seguro de eliminar este curso?')) return;
 
     try {
-        const respuesta = await fetch(`${API_URL}/${id}`, {
-            method: 'DELETE'
-        });
+        const respuesta = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
         const resultado = await respuesta.json();
-        
+
         if (resultado.status === 'success') {
-            cargarCursos(); // Refrescar lista visualmente
+            cargarCursos();
+        } else {
+            mostrarMensaje(resultado.message || 'No se pudo eliminar el curso');
         }
     } catch (error) {
         console.error('Error al eliminar curso:', error);
+        mostrarMensaje('No se pudo conectar con el servidor.');
     }
 }
 
-// Inicializar la carga al abrir la página
-document.addEventListener('DOMContentLoaded', cargarCursos);
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('btn-guardar').addEventListener('click', agregarCurso);
+    cargarCursos();
+});
