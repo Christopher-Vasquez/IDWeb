@@ -12,21 +12,29 @@
         button { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
         button:hover { background-color: #0056b3; }
         .curso-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .acciones { display: flex; gap: 8px; }
         .btn-delete { background-color: #dc3545; }
         .btn-delete:hover { background-color: #bd2130; }
+        .btn-edit { background-color: #ffc107; color: #333; }
+        .btn-edit:hover { background-color: #e0a800; }
+        .btn-cancel { background-color: #6c757d; margin-left: 8px; }
+        .btn-cancel:hover { background-color: #545b62; }
         #mensaje { color: red; font-weight: bold; margin-bottom: 10px; }
+        #modo-edicion { color: #856404; background: #fff3cd; padding: 6px 10px; border-radius: 4px; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
     <h1>Gestión del Laboratorio de Cursos</h1>
 
     <div class="form-group">
-        <h2>Agregar Nuevo Curso</h2>
+        <h2 id="titulo-form">Agregar Nuevo Curso</h2>
+        <div id="modo-edicion"></div>
         <div id="mensaje"></div>
         <input type="text" id="nombre" placeholder="Nombre del Curso">
         <input type="text" id="codigo" placeholder="Código (Ej: IDW-101)">
         <input type="number" id="creditos" placeholder="Créditos (Entero > 0)">
         <button id="btn-guardar">Guardar Curso</button>
+        <button id="btn-cancelar" class="btn-cancel" style="display:none;">Cancelar</button>
     </div>
 
     <h2>Lista de Cursos Actuales</h2>
@@ -36,6 +44,45 @@
         const API_URL = '/api/cursos';
         const divMensaje = document.getElementById('mensaje');
         const contenedor = document.getElementById('lista-cursos');
+        const inputNombre = document.getElementById('nombre');
+        const inputCodigo = document.getElementById('codigo');
+        const inputCreditos = document.getElementById('creditos');
+        const btnGuardar = document.getElementById('btn-guardar');
+        const btnCancelar = document.getElementById('btn-cancelar');
+        const tituloForm = document.getElementById('titulo-form');
+        const avisoEdicion = document.getElementById('modo-edicion');
+
+        // null = modo "crear" (POST); con un id = modo "editar" (PUT)
+        let editandoId = null;
+
+        function limpiarFormulario() {
+            inputNombre.value = '';
+            inputCodigo.value = '';
+            inputCreditos.value = '';
+        }
+
+        function salirModoEdicion() {
+            editandoId = null;
+            limpiarFormulario();
+            tituloForm.textContent = 'Agregar Nuevo Curso';
+            btnGuardar.textContent = 'Guardar Curso';
+            btnCancelar.style.display = 'none';
+            avisoEdicion.style.display = 'none';
+        }
+
+        function entrarModoEdicion(curso) {
+            editandoId = curso.id;
+            inputNombre.value = curso.nombre;
+            inputCodigo.value = curso.codigo;
+            inputCreditos.value = curso.creditos;
+            divMensaje.textContent = '';
+            tituloForm.textContent = 'Editar Curso';
+            btnGuardar.textContent = 'Actualizar Curso';
+            btnCancelar.style.display = 'inline-block';
+            avisoEdicion.textContent = 'Editando el curso con id ' + curso.id;
+            avisoEdicion.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         async function cargarCursos() {
             try {
@@ -63,12 +110,21 @@
                     detalle.textContent = 'Créditos: ' + curso.creditos;
                     info.append(titulo, ' (' + curso.codigo + ')', document.createElement('br'), detalle);
 
-                    const btn = document.createElement('button');
-                    btn.className = 'btn-delete';
-                    btn.textContent = 'Eliminar';
-                    btn.addEventListener('click', () => eliminarCurso(curso.id));
+                    const acciones = document.createElement('div');
+                    acciones.className = 'acciones';
 
-                    card.append(info, btn);
+                    const btnEditar = document.createElement('button');
+                    btnEditar.className = 'btn-edit';
+                    btnEditar.textContent = 'Editar';
+                    btnEditar.addEventListener('click', () => entrarModoEdicion(curso));
+
+                    const btnEliminar = document.createElement('button');
+                    btnEliminar.className = 'btn-delete';
+                    btnEliminar.textContent = 'Eliminar';
+                    btnEliminar.addEventListener('click', () => eliminarCurso(curso.id));
+
+                    acciones.append(btnEditar, btnEliminar);
+                    card.append(info, acciones);
                     contenedor.appendChild(card);
                 });
             } catch (error) {
@@ -78,15 +134,20 @@
             }
         }
 
-        async function agregarCurso() {
-            const nombre = document.getElementById('nombre').value.trim();
-            const codigo = document.getElementById('codigo').value.trim();
-            const creditos = document.getElementById('creditos').value;
+        // POST (crear) o PUT (actualizar) según el modo
+        async function guardarCurso() {
+            const nombre = inputNombre.value.trim();
+            const codigo = inputCodigo.value.trim();
+            const creditos = inputCreditos.value;
             divMensaje.textContent = '';
 
+            const esEdicion = editandoId !== null;
+            const url = esEdicion ? API_URL + '/' + editandoId : API_URL;
+            const metodo = esEdicion ? 'PUT' : 'POST';
+
             try {
-                const respuesta = await fetch(API_URL, {
-                    method: 'POST',
+                const respuesta = await fetch(url, {
+                    method: metodo,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nombre, codigo, creditos })
                 });
@@ -97,9 +158,7 @@
                     return;
                 }
 
-                document.getElementById('nombre').value = '';
-                document.getElementById('codigo').value = '';
-                document.getElementById('creditos').value = '';
+                salirModoEdicion();
                 cargarCursos();
             } catch (error) {
                 console.error('Error al guardar curso:', error);
@@ -113,6 +172,7 @@
                 const respuesta = await fetch(API_URL + '/' + id, { method: 'DELETE' });
                 const resultado = await respuesta.json();
                 if (resultado.status === 'success') {
+                    if (editandoId === id) salirModoEdicion();
                     cargarCursos();
                 } else {
                     divMensaje.textContent = resultado.message || 'No se pudo eliminar';
@@ -123,7 +183,8 @@
             }
         }
 
-        document.getElementById('btn-guardar').addEventListener('click', agregarCurso);
+        btnGuardar.addEventListener('click', guardarCurso);
+        btnCancelar.addEventListener('click', () => { divMensaje.textContent = ''; salirModoEdicion(); });
         cargarCursos();
     </script>
 </body>
