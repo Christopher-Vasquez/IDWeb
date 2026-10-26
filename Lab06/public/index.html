@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio 06 - Panel de Cursos</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 0 20px; background-color: #f4f7f6; }
+        h1, h2 { color: #333; }
+        .form-group { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input { display: block; width: 95%; margin: 10px 0; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .curso-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-delete { background-color: #dc3545; }
+        .btn-delete:hover { background-color: #bd2130; }
+        #mensaje { color: red; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Gestión del Laboratorio de Cursos</h1>
+
+    <div class="form-group">
+        <h2>Agregar Nuevo Curso</h2>
+        <div id="mensaje"></div>
+        <input type="text" id="nombre" placeholder="Nombre del Curso">
+        <input type="text" id="codigo" placeholder="Código (Ej: IDW-101)">
+        <input type="number" id="creditos" placeholder="Créditos (Entero > 0)">
+        <button id="btn-guardar">Guardar Curso</button>
+    </div>
+
+    <h2>Lista de Cursos Actuales</h2>
+    <div id="lista-cursos">Cargando...</div>
+
+    <script>
+        const API_URL = '/api/cursos';
+        const divMensaje = document.getElementById('mensaje');
+        const contenedor = document.getElementById('lista-cursos');
+
+        async function cargarCursos() {
+            try {
+                const respuesta = await fetch(API_URL);
+                const data = await respuesta.json();
+                contenedor.innerHTML = '';
+
+                if (data.status !== 'success') {
+                    divMensaje.textContent = data.message || 'No se pudo cargar la lista';
+                    return;
+                }
+                if (data.data.length === 0) {
+                    contenedor.textContent = 'No hay cursos registrados.';
+                    return;
+                }
+
+                data.data.forEach((curso) => {
+                    const card = document.createElement('div');
+                    card.className = 'curso-card';
+
+                    const info = document.createElement('div');
+                    const titulo = document.createElement('strong');
+                    titulo.textContent = curso.nombre;
+                    const detalle = document.createElement('small');
+                    detalle.textContent = 'Créditos: ' + curso.creditos;
+                    info.append(titulo, ' (' + curso.codigo + ')', document.createElement('br'), detalle);
+
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-delete';
+                    btn.textContent = 'Eliminar';
+                    btn.addEventListener('click', () => eliminarCurso(curso.id));
+
+                    card.append(info, btn);
+                    contenedor.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error al cargar cursos:', error);
+                contenedor.textContent = '';
+                divMensaje.textContent = 'Error al cargar cursos: ' + error.message;
+            }
+        }
+
+        async function agregarCurso() {
+            const nombre = document.getElementById('nombre').value.trim();
+            const codigo = document.getElementById('codigo').value.trim();
+            const creditos = document.getElementById('creditos').value;
+            divMensaje.textContent = '';
+
+            try {
+                const respuesta = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, codigo, creditos })
+                });
+                const resultado = await respuesta.json();
+
+                if (resultado.status !== 'success') {
+                    divMensaje.textContent = resultado.message || 'No se pudo guardar el curso';
+                    return;
+                }
+
+                document.getElementById('nombre').value = '';
+                document.getElementById('codigo').value = '';
+                document.getElementById('creditos').value = '';
+                cargarCursos();
+            } catch (error) {
+                console.error('Error al guardar curso:', error);
+                divMensaje.textContent = 'Error al guardar: ' + error.message;
+            }
+        }
+
+        async function eliminarCurso(id) {
+            if (!confirm('¿Estás seguro de eliminar este curso?')) return;
+            try {
+                const respuesta = await fetch(API_URL + '/' + id, { method: 'DELETE' });
+                const resultado = await respuesta.json();
+                if (resultado.status === 'success') {
+                    cargarCursos();
+                } else {
+                    divMensaje.textContent = resultado.message || 'No se pudo eliminar';
+                }
+            } catch (error) {
+                console.error('Error al eliminar curso:', error);
+                divMensaje.textContent = 'Error al eliminar: ' + error.message;
+            }
+        }
+
+        document.getElementById('btn-guardar').addEventListener('click', agregarCurso);
+        cargarCursos();
+    </script>
+</body>
+</html>
