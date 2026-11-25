@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artesanías y Artes Manuales</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="encabezado">
+        <div class="encabezado__contenido">
+            <h1 class="marca">Artesanías y Artes Manuales</h1>
+            <nav aria-label="Principal">
+                <ul class="menu">
+                    <li><a href="#catalogo">Catálogo</a></li>
+                    <li><a href="#cuenta">Mi cuenta</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- ===== Catálogo público ===== -->
+        <section id="catalogo" aria-labelledby="titulo-catalogo">
+            <h2 id="titulo-catalogo">Catálogo</h2>
+            <p class="intro">Alfarería, cerámica, ebanistería, hilados y tejidos, y mueblería rústica, hechos a mano.</p>
+            <div id="filtros" class="filtros" role="group" aria-label="Filtrar por categoría"></div>
+            <p id="mensaje-catalogo" class="mensaje" role="status"></p>
+            <div id="lista-productos" class="grid-productos"></div>
+        </section>
+
+        <!-- ===== Cuenta de usuario ===== -->
+        <aside id="cuenta" class="cuenta" aria-label="Cuenta de usuario">
+
+            <!-- Visitante: iniciar sesión o registrarse -->
+            <section id="panel-auth" class="panel">
+                <div class="pestanas" role="group" aria-label="Acceso">
+                    <button type="button" id="tab-login" class="pestana" aria-pressed="true">Iniciar sesión</button>
+                    <button type="button" id="tab-registro" class="pestana" aria-pressed="false">Registrarse</button>
+                </div>
+
+                <form id="form-login">
+                    <label for="login-email">Correo electrónico</label>
+                    <input type="email" id="login-email" required autocomplete="username">
+
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" required autocomplete="current-password">
+
+                    <button type="submit" class="btn">Entrar</button>
+                </form>
+
+                <form id="form-registro" hidden>
+                    <label for="reg-email">Correo electrónico</label>
+                    <input type="email" id="reg-email" required autocomplete="username">
+
+                    <label for="reg-password">Contraseña</label>
+                    <input type="password" id="reg-password" required minlength="8" maxlength="72" autocomplete="new-password">
+                    <small>Entre 8 y 72 caracteres.</small>
+
+                    <label for="reg-rol">Quiero registrarme como</label>
+                    <select id="reg-rol">
+                        <option value="cliente">Cliente (comprar y consultar)</option>
+                        <option value="artesano">Artesano (publicar mis piezas)</option>
+                    </select>
+
+                    <button type="submit" class="btn">Crear cuenta</button>
+                </form>
+
+                <p id="mensaje-auth" class="mensaje" role="alert"></p>
+            </section>
+
+            <!-- Sesión iniciada -->
+            <section id="panel-sesion" class="panel" hidden>
+                <h2>Mi cuenta</h2>
+                <p>Sesión iniciada como <strong id="sesion-email"></strong></p>
+                <p>Rol: <span id="sesion-rol" class="insignia"></span></p>
+                <button type="button" id="btn-logout" class="btn btn--secundario">Cerrar sesión</button>
+            </section>
+
+            <!-- Solo artesanos -->
+            <section id="panel-publicar" class="panel" hidden>
+                <h2>Publicar una artesanía</h2>
+                <form id="form-publicar">
+                    <label for="pub-nombre">Nombre de la pieza</label>
+                    <input type="text" id="pub-nombre" required maxlength="80">
+
+                    <label for="pub-categoria">Categoría</label>
+                    <select id="pub-categoria" required>
+                        <option value="alfareria">Alfarería</option>
+                        <option value="ceramica">Cerámica</option>
+                        <option value="ebanisteria">Ebanistería</option>
+                        <option value="hilados-tejidos">Hilados y tejidos</option>
+                        <option value="muebleria-rustica">Mueblería rústica</option>
+                    </select>
+
+                    <label for="pub-precio">Precio (S/)</label>
+                    <input type="number" id="pub-precio" required min="0.01" step="0.01">
+
+                    <button type="submit" class="btn">Publicar</button>
+                </form>
+                <p id="mensaje-publicar" class="mensaje" role="status"></p>
+            </section>
+
+            <!-- Solo clientes -->
+            <section id="aviso-cliente" class="panel panel--aviso" hidden>
+                <p>Tu cuenta es de <strong>cliente</strong>: puedes explorar el catálogo. Para publicar piezas, regístrate como artesano.</p>
+            </section>
+        </aside>
+    </main>
+
+    <footer class="pie">
+        <p>&copy; 2026 Grupo 01 · Artesanías y Artes Manuales · Introducción al Desarrollo Web</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
